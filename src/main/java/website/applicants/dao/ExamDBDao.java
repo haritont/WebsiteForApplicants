@@ -1,20 +1,18 @@
 package website.applicants.dao;
 
 import website.applicants.entity.ExamEntity;
-import website.applicants.H2Connection;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static website.applicants.H2Connection.executeQueryStatement;
+import static website.applicants.H2Connection.executeStatement;
+
 public class ExamDBDao implements Dao<ExamEntity> {
 
-    private final H2Connection h2Connection;
-
     public ExamDBDao() {
-        h2Connection = H2Connection.getH2Connection();
         executeStatement("CREATE TABLE IF NOT EXISTS EXAM" +
                 "(id number primary key not null," +
                 "idEnrollee number not null," +
@@ -53,13 +51,9 @@ public class ExamDBDao implements Dao<ExamEntity> {
     public List<ExamEntity> getAll() {
         List<ExamEntity> examEntities = new ArrayList<>();
         ResultSet resultExam = executeQueryStatement("select * from EXAM");
-        while (true) {
+        for (int index = 1; index <= size(); index++) {
             try {
-                if (!resultExam.next()) break;
-            } catch (SQLException exp) {
-                throw new RuntimeException(exp);
-            }
-            try {
+                resultExam.absolute(index);
                 examEntities.add(new ExamEntity(resultExam.getInt("id"), resultExam.getInt("idEnrollee"),
                         resultExam.getString("subject"), resultExam.getInt("score")));
             } catch (SQLException exp) {
@@ -97,33 +91,5 @@ public class ExamDBDao implements Dao<ExamEntity> {
                 VALUES (1, 0, 100 , 'Буянство');INSERT INTO EXAM (id, idEnrollee, score, subject)
                 VALUES (2, 0, 100 , 'Хулиганство');INSERT INTO EXAM (id, idEnrollee, score, subject)
                 VALUES (3, 0, 100 , 'Обжорство');""");
-    }
-    private void executeStatement(String request){
-        Statement  statement = getStatement();
-        try {
-            statement.execute(request);
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
-        try {
-            statement.close();
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
-    }
-    private ResultSet executeQueryStatement(String request){
-        Statement  statement = getStatement();
-        try {
-            return statement.executeQuery(request);
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
-    }
-    private Statement getStatement(){
-        try {
-            return h2Connection.getConnection().createStatement();
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
     }
 }

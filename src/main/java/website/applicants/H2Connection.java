@@ -2,9 +2,7 @@ package website.applicants;
 
 import lombok.Getter;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class H2Connection {
     private static final String JDBC_URL = "jdbc:h2:mem:testdb";
@@ -29,5 +27,34 @@ public class H2Connection {
     }
     public static H2Connection getH2Connection()  {
         return new H2Connection();
+    }
+
+    public static void executeStatement(String request){
+        Statement statement = getStatement();
+        try {
+            statement.execute(request);
+        } catch (SQLException exp) {
+            throw new RuntimeException(exp);
+        }
+        try {
+            statement.close();
+        } catch (SQLException exp) {
+            throw new RuntimeException(exp);
+        }
+    }
+    public static ResultSet executeQueryStatement(String request){
+        Statement  statement = getStatement();
+        try {
+            return statement.executeQuery(request);
+        } catch (SQLException exp) {
+            throw new RuntimeException(exp);
+        }
+    }
+    private static Statement getStatement(){
+        try {
+            return getH2Connection().getConnection().createStatement();
+        } catch (SQLException exp) {
+            throw new RuntimeException(exp);
+        }
     }
 }
