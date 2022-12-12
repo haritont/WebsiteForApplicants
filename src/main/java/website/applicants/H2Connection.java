@@ -12,7 +12,6 @@ public class H2Connection {
     private static final String PASSWORD = "";
     private static final String DRIVER_CLASS = "org.h2.Driver";
 
-    //private static H2Connection h2Connection;
     @Getter
     Connection connection;
 

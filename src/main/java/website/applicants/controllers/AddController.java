@@ -10,29 +10,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
 
 @Controller
 public class AddController {
-   private EnrolleeService enrolleeService = new EnrolleeService(new EnrolleeDBDao());
+    private final EnrolleeService enrolleeService = new EnrolleeService(new EnrolleeDBDao());
 
     @GetMapping("/add")
     public String enrolleeForm(Model model) {
-        model.addAttribute("title","Добавление абитуриента");
-        Enrollee enrollee = new Enrollee ();
-        model.addAttribute("enrollee", enrollee);
-        model.addAttribute("number",  enrolleeService.sizeEnrollees());
+        model.addAttribute("title", "Добавить абитуриента");
+        model.addAttribute("enrollee", new Enrollee());
+        model.addAttribute("number", enrolleeService.sizeEnrollees());
         return "add";
     }
+
     @PostMapping("/add")
     public String enrolleeSubmit(@ModelAttribute Enrollee enrollee, Model model) {
-        if (!enrollee.getFullName().equals("") && enrollee.getBirthday()!=null) {
+        model.addAttribute("title", "Список абитуриентов");
+        if (!enrollee.getFullName().equals("") && enrollee.getBirthday() != null) {
             enrollee.setId(enrolleeService.sizeEnrollees());
             enrolleeService.save(enrollee);
         }
-        List<Enrollee> enrollees = enrolleeService.getAllEnrolles();
-        model.addAttribute("enrollees", enrollees);
+        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";
     }
-
 }

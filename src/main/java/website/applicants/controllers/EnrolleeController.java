@@ -2,7 +2,6 @@ package website.applicants.controllers;
 
 import website.applicants.dao.EnrolleeDBDao;
 import website.applicants.dao.ExamDBDao;
-import website.applicants.models.Enrollee;
 import website.applicants.models.Exam;
 import website.applicants.service.EnrolleeService;
 import website.applicants.service.ExamService;
@@ -27,45 +26,43 @@ public class EnrolleeController {
     @GetMapping("/enrollees")
     public String enrollees(Model model){
         model.addAttribute("title","Список абитуриентов");
-        List<Enrollee> enrollees =enrolleeService.getAllEnrolles();
-        model.addAttribute("enrollees", enrollees);
+        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "enrollees";
     }
 
     @GetMapping("/enrollee/{id}")
-    public String enrollee(@PathVariable int id, Model model){
-        Enrollee enrollee = enrolleeService.getEnrollee(id);
-        model.addAttribute("enrollee", enrollee);
-        List<Exam> exams = examService.getAllExams();
-        exams = exams.stream().filter(x->x.getIdEnrollee()==id).collect(Collectors.toList());
-        model.addAttribute("exams", exams);
+    public String enrollee(@PathVariable final int id, Model model){
+        model.addAttribute("title", "Экзамены абитуриента");
+        model.addAttribute("enrollee", enrolleeService.getEnrollee(id));
+        model.addAttribute("exams", examService.getExamsEnrolleeId(id));
         return "enrollee";
     }
 
     @GetMapping("/exam{id}")
-    public String examForm(@PathVariable int id, Model model) {
+    public String examForm(@PathVariable final int id, Model model) {
+        model.addAttribute("title", "Добавить экзамены");
         idEnrollee = id;
-        model.addAttribute("title","Добавление экзамена'");
-        ArrayList<String> subjects= new ArrayList<>();
-        List<Exam> exams = examService.getAllExams();
-        exams.stream().forEach(x->subjects.add(x.getSubject()));
-        List<String> onlySubjects =  subjects.stream().distinct().collect(Collectors.toList());
-        model.addAttribute("subjects", onlySubjects);
-        Exam exam = new Exam();
-        model.addAttribute("exam", exam);
+        model.addAttribute("subjects", getSubjects());
+        model.addAttribute("exam", new Exam());
         model.addAttribute("id", id);
         return "exam";
     }
 
+    private List<String> getSubjects(){
+        ArrayList<String> subjects= new ArrayList<>();
+        List<Exam> exams = examService.getAllExams();
+        exams.forEach(x->subjects.add(x.getSubject()));
+        return subjects.stream().distinct().collect(Collectors.toList());
+    }
+
     @PostMapping("/exam")
     public String examSubmit(Exam exam, Model model) {
+        model.addAttribute("title", "Список абитуриентов");
         if (!exam.getSubject().equals("")) {
             exam.setIdEnrollee(idEnrollee);
             examService.save(exam);
         }
-        List<Enrollee> enrollees = enrolleeService.getAllEnrolles();
-        model.addAttribute("enrollees", enrollees);
+        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";
     }
-
 }

@@ -22,13 +22,11 @@ public class EnrolleeEntity {
     @Autowired
     @Column(name = "ID", nullable = false)
     private int id;
-
-    @Column(name = "FULLNAME", length = 64, nullable = false)
-    private String fullName;
-
     @Temporal(TemporalType.DATE)
     @Column(name = "BIRTHDAY", nullable = false)
     private Date birthday;
+    @Column(name = "FULLNAME", length = 64, nullable = false)
+    private String fullName;
 
     public EnrolleeEntity(Enrollee enrollee) {
         this.id = enrollee.getId();
