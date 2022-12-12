@@ -1,5 +1,6 @@
 package website.applicants.dao;
 
+import website.applicants.H2Connection;
 import website.applicants.entity.ExamEntity;
 
 import java.sql.ResultSet;
@@ -7,13 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static website.applicants.H2Connection.executeQueryStatement;
-import static website.applicants.H2Connection.executeStatement;
+import static website.applicants.H2Connection.*;
 
 public class ExamDBDao implements Dao<ExamEntity> {
 
+    private final  H2Connection h2Connection;
     public ExamDBDao() {
-        executeStatement("CREATE TABLE IF NOT EXISTS EXAM" +
+        h2Connection = getH2Connection();
+        h2Connection.executeStatement("CREATE TABLE IF NOT EXISTS EXAM" +
                 "(id number primary key not null," +
                 "idEnrollee number not null," +
                 " score number not null, " +
@@ -23,7 +25,7 @@ public class ExamDBDao implements Dao<ExamEntity> {
 
     @Override
     public int size() {
-        ResultSet resultId = executeQueryStatement("SELECT idEnrollee, FROM EXAM");
+        ResultSet resultId = h2Connection.executeQueryStatement("SELECT idEnrollee, FROM EXAM");
         try {
             resultId.last();
         } catch (SQLException exp) {
@@ -38,7 +40,7 @@ public class ExamDBDao implements Dao<ExamEntity> {
 
     @Override
     public ExamEntity get(int idEnrollee) {
-        ResultSet resultExam = executeQueryStatement("SELECT * FROM EXAM WHERE idEnrollee = " + idEnrollee);
+        ResultSet resultExam = h2Connection.executeQueryStatement("SELECT * FROM EXAM WHERE idEnrollee = " + idEnrollee);
         try {
             return new ExamEntity(resultExam.getInt("id"), idEnrollee,
                     resultExam.getString("subject"), resultExam.getInt("score"));
@@ -50,7 +52,7 @@ public class ExamDBDao implements Dao<ExamEntity> {
     @Override
     public List<ExamEntity> getAll() {
         List<ExamEntity> examEntities = new ArrayList<>();
-        ResultSet resultExam = executeQueryStatement("select * from EXAM");
+        ResultSet resultExam = h2Connection.executeQueryStatement("select * from EXAM");
         for (int index = 1; index <= size(); index++) {
             try {
                 resultExam.absolute(index);
@@ -66,16 +68,16 @@ public class ExamDBDao implements Dao<ExamEntity> {
 
     @Override
     public void save(ExamEntity examEntity) {
-        ResultSet resultId = executeQueryStatement("SELECT id FROM EXAM WHERE idEnrollee = "
+        ResultSet resultId = h2Connection.executeQueryStatement("SELECT id FROM EXAM WHERE idEnrollee = "
                 + examEntity.getIdEnrollee() + " AND subject = '" + examEntity.getSubject()+"';");
         try {
             resultId.last();
             if (resultId.getRow()!=0) {
-                executeStatement("UPDATE EXAM SET score = " + examEntity.getScore() +
+                h2Connection.executeStatement("UPDATE EXAM SET score = " + examEntity.getScore() +
                         " WHERE idEnrollee = " + examEntity.getIdEnrollee()
                         + " AND subject = '" + examEntity.getSubject()+"';");
             } else {
-                executeStatement("INSERT INTO EXAM (id, idEnrollee, score, subject)\n" +
+                h2Connection.executeStatement("INSERT INTO EXAM (id, idEnrollee, score, subject)\n" +
                         "VALUES (" + size() + "," + examEntity.getIdEnrollee() + "," + examEntity.getScore()
                         + ", '" + examEntity.getSubject() + "');");
             }
@@ -85,7 +87,7 @@ public class ExamDBDao implements Dao<ExamEntity> {
     }
 
     private  void setExams(){
-        executeStatement("""
+        h2Connection.executeStatement("""
                 INSERT INTO EXAM (id, idEnrollee, score, subject)
                 VALUES (0, 0, 100, 'Шалопайство');INSERT INTO EXAM (id, idEnrollee, score, subject)
                 VALUES (1, 0, 100 , 'Буянство');INSERT INTO EXAM (id, idEnrollee, score, subject)

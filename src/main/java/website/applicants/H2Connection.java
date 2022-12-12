@@ -29,7 +29,7 @@ public class H2Connection {
         return new H2Connection();
     }
 
-    public static void executeStatement(String request){
+    public void executeStatement(String request){
         Statement statement = getStatement();
         try {
             statement.execute(request);
@@ -42,7 +42,7 @@ public class H2Connection {
             throw new RuntimeException(exp);
         }
     }
-    public static ResultSet executeQueryStatement(String request){
+    public ResultSet executeQueryStatement(String request){
         Statement  statement = getStatement();
         try {
             return statement.executeQuery(request);
@@ -50,9 +50,9 @@ public class H2Connection {
             throw new RuntimeException(exp);
         }
     }
-    private static Statement getStatement(){
+    private Statement getStatement(){
         try {
-            return getH2Connection().getConnection().createStatement();
+            return getConnection().createStatement();
         } catch (SQLException exp) {
             throw new RuntimeException(exp);
         }
