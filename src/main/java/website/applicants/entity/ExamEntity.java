@@ -30,9 +30,9 @@ public class ExamEntity {
     @Column(name = "SCORE", nullable = false)
     private int score;
 
-    public ExamEntity(Exam exam){
-        this.idEnrollee=exam.getIdEnrollee();
-        this.subject=exam.getSubject();
-        this.score=exam.getScore();
+    public ExamEntity(Exam exam) {
+        this.idEnrollee = exam.getIdEnrollee();
+        this.subject = exam.getSubject();
+        this.score = exam.getScore();
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -17,15 +18,16 @@ import java.util.Date;
 @NoArgsConstructor
 @NotNull
 public class Enrollee {
-    @Size(min=2, max=30)
-    private String fullName;
     private int id;
+    @Size(min = 2, max = 30)
+    private String fullName;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
-    public Enrollee (EnrolleeEntity enrollee){
-        this.id=enrollee.getId();
-        this.birthday=enrollee.getBirthday();
-        this.fullName=enrollee.getFullName();
+    public Enrollee(EnrolleeEntity enrollee) {
+        this.id = enrollee.getId();
+        this.birthday = enrollee.getBirthday();
+        this.fullName = enrollee.getFullName();
     }
 }

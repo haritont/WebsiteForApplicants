@@ -15,9 +15,9 @@ public class Exam {
     private String subject;
     private int score;
 
-    public Exam(ExamEntity exam){
-        this.idEnrollee= exam.getIdEnrollee();
-        this.score=exam.getScore();
-        this.subject=exam.getSubject();
+    public Exam(ExamEntity exam) {
+        this.idEnrollee = exam.getIdEnrollee();
+        this.score = exam.getScore();
+        this.subject = exam.getSubject();
     }
 }
