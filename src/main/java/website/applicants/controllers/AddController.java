@@ -1,7 +1,6 @@
 package website.applicants.controllers;
 
 import lombok.RequiredArgsConstructor;
-import website.applicants.entity.EnrolleeEntity;
 import website.applicants.models.Enrollee;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +18,7 @@ public class AddController {
     @GetMapping("/add")
     public String enrolleeForm(Model model) {
         model.addAttribute("title", "Добавить абитуриента");
-        EnrolleeEntity enrolleeEntity = new EnrolleeEntity();
-        model.addAttribute("enrollee", new Enrollee(enrolleeEntity));
+        model.addAttribute("enrollee", new Enrollee());
         return "add";
     }
 
