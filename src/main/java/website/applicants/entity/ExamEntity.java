@@ -1,10 +1,7 @@
 package website.applicants.entity;
 
+import lombok.*;
 import website.applicants.models.Exam;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -15,10 +12,10 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ExamEntity {
     @Id
     @GeneratedValue
-    @Autowired
     @Column(name = "ID", nullable = false)
     private int id;
     @Column(name = "IDENROLLEE", nullable = false)
@@ -30,9 +27,11 @@ public class ExamEntity {
     @Column(name = "SCORE", nullable = false)
     private int score;
 
-    public ExamEntity(Exam exam) {
-        this.idEnrollee = exam.getIdEnrollee();
-        this.subject = exam.getSubject();
-        this.score = exam.getScore();
+    public static ExamEntity examEntity(Exam exam) {
+        return ExamEntity.builder()
+                .idEnrollee(exam.getIdEnrollee())
+                .score(exam.getScore())
+                .subject(exam.getSubject())
+                .build();
     }
 }

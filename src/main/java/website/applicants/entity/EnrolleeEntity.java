@@ -1,11 +1,7 @@
 package website.applicants.entity;
 
+import lombok.*;
 import website.applicants.models.Enrollee;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,10 +12,10 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EnrolleeEntity {
     @Id
     @GeneratedValue
-    @Autowired
     @Column(name = "ID", nullable = false)
     private int id;
     @Temporal(TemporalType.DATE)
@@ -28,9 +24,10 @@ public class EnrolleeEntity {
     @Column(name = "FULLNAME", length = 64, nullable = false)
     private String fullName;
 
-    public EnrolleeEntity(Enrollee enrollee) {
-        this.id = enrollee.getId();
-        this.birthday = enrollee.getBirthday();
-        this.fullName = enrollee.getFullName();
+    public static EnrolleeEntity enrolleeEntity(Enrollee enrollee) {
+        return EnrolleeEntity.builder()
+                .id(enrollee.getId())
+                .birthday(enrollee.getBirthday())
+                .fullName(enrollee.getFullName()).build();
     }
 }
