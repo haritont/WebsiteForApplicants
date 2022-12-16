@@ -10,7 +10,6 @@ import website.applicants.repository.ExamRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +19,10 @@ public class DefaultExamService implements ExamService {
     @Override
     public List<Exam> getAllExams() {
         val exams = new ArrayList<Exam>();
-        examRepository.findAll().forEach(examEntity -> exams.add(Exam.exam(examEntity)));
+        examRepository
+                .findAll()
+                .forEach(examEntity -> exams
+                        .add(Exam.exam(examEntity)));
         return exams;
     }
 
@@ -42,9 +44,11 @@ public class DefaultExamService implements ExamService {
 
     @Override
     public List<Exam> getExamsEnrolleeId(final int id) {
-        return getAllExams()
-                .stream()
-                .filter(exam -> exam.getIdEnrollee() == id)
-                .collect(Collectors.toList());
+        val exams = new ArrayList<Exam>();
+        examRepository
+                .findAllByIdEnrolleeLike(id)
+                .forEach(examEntity -> exams
+                        .add(Exam.exam(examEntity)));
+        return exams;
     }
 }
