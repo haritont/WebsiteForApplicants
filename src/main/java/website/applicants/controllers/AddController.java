@@ -17,16 +17,16 @@ public class AddController {
 
     @GetMapping("/add")
     public String enrolleeForm(Model model) {
-        model.addAttribute("title", "Добавить абитуриента");
-        model.addAttribute("enrollee", new Enrollee());
+        model.addAttribute("title", "Добавить абитуриента")
+                .addAttribute("enrollee", new Enrollee());
         return "add";
     }
 
     @PostMapping("/add")
-    public String enrolleeSubmit(@ModelAttribute Enrollee enrollee, Model model) {
-        model.addAttribute("title", "Список абитуриентов");
+    public String enrolleeSubmit(@ModelAttribute final Enrollee enrollee, Model model) {
         enrolleeService.save(enrollee);
-        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
+        model.addAttribute("title", "Список абитуриентов")
+                .addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";
     }
 }

@@ -19,33 +19,33 @@ public class EnrolleeController {
 
     @GetMapping("/enrollees")
     public String enrollees(Model model) {
-        model.addAttribute("title", "Список абитуриентов");
-        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
+        model.addAttribute("title", "Список абитуриентов")
+                .addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "enrollees";
     }
 
     @GetMapping("/enrollee/{id}")
     public String enrollee(@PathVariable final int id, Model model) {
-        model.addAttribute("title", "Экзамены абитуриента");
-        model.addAttribute("enrollee", enrolleeService.getEnrollee(id));
-        model.addAttribute("exams", examService.getExamsEnrolleeId(id));
+        model.addAttribute("title", "Экзамены абитуриента")
+                .addAttribute("enrollee", enrolleeService.getEnrollee(id))
+                .addAttribute("exams", examService.getExamsEnrolleeId(id));
         return "enrollee";
     }
 
     @GetMapping("/exam{id}")
     public String examForm(@PathVariable final int id, Model model) {
-        model.addAttribute("title", "Добавить экзамены");
-        model.addAttribute("subjects", examService.getSingleExams());
-        model.addAttribute("exam", new Exam());
-        model.addAttribute("id", id);
+        model.addAttribute("title", "Добавить экзамены")
+                .addAttribute("subjects", examService.getSingleExams())
+                .addAttribute("exam", new Exam())
+                .addAttribute("id", id);
         return "exam";
     }
 
     @PostMapping("/exam")
-    public String examSubmit(Exam exam, Model model) {
-        model.addAttribute("title", "Список абитуриентов");
+    public String examSubmit(final Exam exam, Model model) {
         examService.save(exam);
-        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
+        model.addAttribute("title", "Список абитуриентов")
+                .addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";
     }
 }
