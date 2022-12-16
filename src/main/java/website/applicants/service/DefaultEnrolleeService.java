@@ -17,23 +17,23 @@ public class DefaultEnrolleeService implements EnrolleeService {
 
     @Override
     public List<Enrollee> getAllEnrolles() {
-        val iterable = enrolleeRepository.findAll();
         val enrollees = new ArrayList<Enrollee>();
-        for (EnrolleeEntity enrolleeEntity : iterable) {
-            enrollees.add(new Enrollee(enrolleeEntity));
-        }
-
+        enrolleeRepository.findAll()
+                .forEach(enrolleeEntity -> enrollees
+                        .add(Enrollee.enrollee(enrolleeEntity)));
         return enrollees;
     }
 
     @Override
-    public Enrollee getEnrollee(int id) {
-        return new Enrollee(enrolleeRepository.findById(id).orElseThrow(() -> new NullPointerException("Enrollee not found")));
+    public Enrollee getEnrollee(final int id) {
+        return Enrollee.enrollee(enrolleeRepository.findById(id)
+                .orElseThrow(() -> new NullPointerException("Абитуриент не найден")));
     }
 
     @Override
-    public void save(Enrollee enrollee) {
-        if (!enrollee.getFullName().equals("") && enrollee.getBirthday() != null)
-            enrolleeRepository.save(new EnrolleeEntity(enrollee));
+    public void save(final Enrollee enrollee) {
+        if (!enrollee.getFullName().isEmpty() && enrollee.getBirthday() != null) {
+            enrolleeRepository.save(EnrolleeEntity.enrolleeEntity(enrollee));
+        }
     }
 }

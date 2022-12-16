@@ -10,6 +10,7 @@ import website.applicants.repository.ExamRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,36 +19,32 @@ public class DefaultExamService implements ExamService {
 
     @Override
     public List<Exam> getAllExams() {
-        val iterable = examRepository.findAll();
         val exams = new ArrayList<Exam>();
-        for (ExamEntity examEntity : iterable) {
-            exams.add(new Exam(examEntity));
-        }
+        examRepository.findAll().forEach(examEntity -> exams.add(Exam.exam(examEntity)));
         return exams;
     }
 
     @Override
     public List<String> getSingleExams() {
         val subjects = new ArrayList<String>();
-        val exams = getAllExams();
-        for (val exam : exams) {
-            subjects.add(exam.getSubject());
-        }
+        getAllExams()
+                .forEach(exam -> subjects
+                        .add(exam.getSubject()));
         return ImmutableSet.copyOf(subjects).asList();
     }
 
     @Override
-    public void save(Exam exam) {
-        if (!exam.getSubject().equals("")) examRepository.save(new ExamEntity(exam));
+    public void save(final Exam exam) {
+        if (!exam.getSubject().isEmpty()) {
+            examRepository.save(ExamEntity.examEntity(exam));
+        }
     }
 
     @Override
-    public List<Exam> getExamsEnrolleeId(int id) {
-        val iterable = examRepository.findAll();
-        val exams = new ArrayList<Exam>();
-        for (ExamEntity examEntity : iterable) {
-            if (examEntity.getIdEnrollee() == id) exams.add(new Exam(examEntity));
-        }
-        return exams;
+    public List<Exam> getExamsEnrolleeId(final int id) {
+        return getAllExams()
+                .stream()
+                .filter(exam -> exam.getIdEnrollee() == id)
+                .collect(Collectors.toList());
     }
 }
