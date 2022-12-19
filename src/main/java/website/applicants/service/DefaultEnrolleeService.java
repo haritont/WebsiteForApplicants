@@ -33,7 +33,8 @@ public class DefaultEnrolleeService implements EnrolleeService {
     @Override
     public void save(final Enrollee enrollee) {
         if (!enrollee.getFullName().isEmpty() && enrollee.getBirthday() != null) {
-            enrolleeRepository.save(EnrolleeEntity.enrolleeEntity(enrollee));
+            enrolleeRepository
+                    .save(EnrolleeEntity.enrolleeEntity(enrollee));
         }
     }
 }

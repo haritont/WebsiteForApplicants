@@ -19,23 +19,20 @@ public class EnrolleeController {
 
     @GetMapping("/enrollees")
     public String enrollees(Model model) {
-        model.addAttribute("title", "Список абитуриентов")
-                .addAttribute("enrollees", enrolleeService.getAllEnrolles());
+        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "enrollees";
     }
 
     @GetMapping("/enrollee/{id}")
     public String enrollee(@PathVariable final int id, Model model) {
-        model.addAttribute("title", "Экзамены абитуриента")
-                .addAttribute("enrollee", enrolleeService.getEnrollee(id))
+        model.addAttribute("enrollee", enrolleeService.getEnrollee(id))
                 .addAttribute("exams", examService.getExamsEnrolleeId(id));
         return "enrollee";
     }
 
     @GetMapping("/exam{id}")
     public String examForm(@PathVariable final int id, Model model) {
-        model.addAttribute("title", "Добавить экзамены")
-                .addAttribute("subjects", examService.getSingleExams())
+        model.addAttribute("subjects", examService.getSingleExams())
                 .addAttribute("exam", new Exam())
                 .addAttribute("id", id);
         return "exam";
@@ -44,8 +41,7 @@ public class EnrolleeController {
     @PostMapping("/exam")
     public String examSubmit(final Exam exam, Model model) {
         examService.save(exam);
-        model.addAttribute("title", "Список абитуриентов")
-                .addAttribute("enrollees", enrolleeService.getAllEnrolles());
+        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";
     }
 }
