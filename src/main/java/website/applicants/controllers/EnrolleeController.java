@@ -16,6 +16,7 @@ import website.applicants.service.ExamService;
 public class EnrolleeController {
     private final EnrolleeService enrolleeService;
     private final ExamService examService;
+    private int idEnrollee;
 
     @GetMapping("/enrollees")
     public String enrollees(Model model) {
@@ -35,11 +36,13 @@ public class EnrolleeController {
         model.addAttribute("subjects", examService.getSingleExams())
                 .addAttribute("exam", new Exam())
                 .addAttribute("idEnrollee", idEnrollee);
+        this.idEnrollee = idEnrollee;
         return "exam";
     }
 
     @PostMapping("/exam")
     public String examSubmit(final Exam exam, Model model) {
+        exam.setIdEnrollee(this.idEnrollee);
         examService.save(exam);
         model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";

@@ -14,7 +14,9 @@
     <form action="#" th:action="@{/exam}" th:object="${exam}" method="post">
 
         <div class="my-3 p-3">
-            <h2 class="display-5">Введите данные<p th:text="'Id: '+${idEnrollee}"/></h2>
+            <h2 class="display-5">Введите данные
+                <p th:text="'Id: '+${idEnrollee}"/>
+            </h2>
         </div>
 
         <div class="bg-body shadow-sm mx-auto" style="width: 20%; height: 300px; border-radius: 21px 21px 0 0;">
