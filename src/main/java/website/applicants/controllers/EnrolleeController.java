@@ -19,7 +19,6 @@ public class EnrolleeController {
 
     @GetMapping("/enrollees")
     public String enrollees(Model model) {
-        examService.save(new Exam(1, 1, "y", 80));
         model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "enrollees";
     }
