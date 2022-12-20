@@ -5,7 +5,6 @@ import website.applicants.models.Enrollee;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import website.applicants.service.EnrolleeService;
 
@@ -22,7 +21,7 @@ public class AddController {
     }
 
     @PostMapping("/add")
-    public String enrolleeSubmit(@ModelAttribute final Enrollee enrollee, Model model) {
+    public String enrolleeSubmit(final Enrollee enrollee, Model model) {
         enrolleeService.save(enrollee);
         model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "/enrollees";

@@ -19,6 +19,7 @@ public class EnrolleeController {
 
     @GetMapping("/enrollees")
     public String enrollees(Model model) {
+        examService.save(new Exam(1, 1, "y", 80));
         model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
         return "enrollees";
     }
@@ -30,11 +31,11 @@ public class EnrolleeController {
         return "enrollee";
     }
 
-    @GetMapping("/exam{id}")
-    public String examForm(@PathVariable final int id, Model model) {
+    @GetMapping("/exam{idEnrollee}")
+    public String examForm(@PathVariable final int idEnrollee, Model model) {
         model.addAttribute("subjects", examService.getSingleExams())
                 .addAttribute("exam", new Exam())
-                .addAttribute("id", id);
+                .addAttribute("idEnrollee", idEnrollee);
         return "exam";
     }
 
