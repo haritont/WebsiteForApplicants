@@ -1,15 +1,15 @@
 package website.applicants.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.dozer.DozerBeanMapper;
 import org.springframework.stereotype.Service;
 import website.applicants.entity.EnrolleeEntity;
 import website.applicants.models.Enrollee;
 import website.applicants.repository.EnrolleeRepository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +19,9 @@ public class DefaultEnrolleeService implements EnrolleeService {
 
     @Override
     public List<Enrollee> getAllEnrolles() {
-        val enrollees = new ArrayList<Enrollee>();
-        enrolleeRepository.findAll()
-                .forEach(enrolleeEntity -> enrollees
-                        .add(mapper.map(enrolleeEntity, Enrollee.class)));
-        return enrollees;
+        return StreamSupport.stream(enrolleeRepository.findAll().spliterator(), false)
+                .map(enrolleeEntity -> mapper.map(enrolleeEntity, Enrollee.class))
+                .collect(Collectors.toList());
     }
 
     @Override
