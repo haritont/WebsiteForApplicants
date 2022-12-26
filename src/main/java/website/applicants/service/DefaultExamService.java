@@ -7,6 +7,7 @@ import website.applicants.mappers.ExamMapper;
 import website.applicants.models.Exam;
 import website.applicants.repository.ExamRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -18,9 +19,10 @@ public class DefaultExamService implements ExamService {
 
     @Override
     public List<Exam> getAllExams() {
-        return StreamSupport.stream(examRepository.findAll().spliterator(), false)
-            .map(ExamMapper.instance::examEntityToExam)
-            .collect(Collectors.toList());
+        return ExamMapper.instance
+            .listExamEntityToListExam(StreamSupport
+                .stream(examRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList()));
     }
 
     @Override
@@ -40,8 +42,7 @@ public class DefaultExamService implements ExamService {
 
     @Override
     public List<Exam> getExamsEnrolleeId(final int id) {
-        return examRepository.findAllByIdEnrolleeLike(id).stream()
-            .map(ExamMapper.instance::examEntityToExam)
-            .collect(Collectors.toList());
+        return ExamMapper.instance
+            .listExamEntityToListExam(new ArrayList<>(examRepository.findAllByIdEnrolleeLike(id)));
     }
 }

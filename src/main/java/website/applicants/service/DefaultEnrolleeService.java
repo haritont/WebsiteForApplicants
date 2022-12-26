@@ -17,9 +17,10 @@ public class DefaultEnrolleeService implements EnrolleeService {
 
     @Override
     public List<Enrollee> getAllEnrolles() {
-        return StreamSupport.stream(enrolleeRepository.findAll().spliterator(), false)
-            .map(EnrolleeMapper.instance::enrolleeEntityToEnrollee)
-            .collect(Collectors.toList());
+        return EnrolleeMapper.instance
+            .listEnrolleeEntityToListEnrollee(StreamSupport
+                .stream(enrolleeRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList()));
     }
 
     @Override
