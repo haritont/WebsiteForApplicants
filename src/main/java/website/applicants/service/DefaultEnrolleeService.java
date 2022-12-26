@@ -1,9 +1,8 @@
 package website.applicants.service;
 
 import lombok.RequiredArgsConstructor;
-import org.dozer.DozerBeanMapper;
 import org.springframework.stereotype.Service;
-import website.applicants.entity.EnrolleeEntity;
+import website.applicants.mappers.EnrolleeMapper;
 import website.applicants.models.Enrollee;
 import website.applicants.repository.EnrolleeRepository;
 
@@ -15,26 +14,24 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 public class DefaultEnrolleeService implements EnrolleeService {
     private final EnrolleeRepository enrolleeRepository;
-    private final DozerBeanMapper mapper = new DozerBeanMapper();
 
     @Override
     public List<Enrollee> getAllEnrolles() {
         return StreamSupport.stream(enrolleeRepository.findAll().spliterator(), false)
-                .map(enrolleeEntity -> mapper.map(enrolleeEntity, Enrollee.class))
-                .collect(Collectors.toList());
+            .map(EnrolleeMapper.instance::enrolleeEntityToEnrollee)
+            .collect(Collectors.toList());
     }
 
     @Override
     public Enrollee getEnrollee(final int id) {
-        return mapper.map(enrolleeRepository.findById(id)
-                .orElseThrow(() -> new NullPointerException("Абитуриент не найден")), Enrollee.class);
+        return EnrolleeMapper.instance.enrolleeEntityToEnrollee(enrolleeRepository.findById(id)
+            .orElseThrow(() -> new NullPointerException("Абитуриент не найден")));
     }
 
     @Override
     public void save(final Enrollee enrollee) {
         if (!enrollee.getFullName().isEmpty() && enrollee.getBirthday() != null) {
-            enrolleeRepository
-                    .save(mapper.map(enrollee, EnrolleeEntity.class));
+            enrolleeRepository.save(EnrolleeMapper.instance.enrolleeToEnrolleeEntity(enrollee));
         }
     }
 }
