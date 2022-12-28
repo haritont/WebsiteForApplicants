@@ -3,6 +3,7 @@ package website.applicants.service;
 import com.google.common.collect.ImmutableSet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import website.applicants.exceptions.SaveException;
 import website.applicants.mappers.ExamMapper;
 import website.applicants.models.Exam;
 import website.applicants.repository.ExamRepository;
@@ -34,11 +35,11 @@ public class DefaultExamService implements ExamService {
     }
 
     @Override
-    public void save(final Exam exam) {
+    public void save(final Exam exam) throws SaveException {
         try {
             examRepository.save(ExamMapper.instance.examToExamEntity(exam));
         } catch (Exception exception) {
-            throw new IllegalArgumentException("Введены не корректные данные");
+            throw new SaveException("Введены не корректные данные");
         }
     }
 

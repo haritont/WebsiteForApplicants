@@ -2,6 +2,8 @@ package website.applicants.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import website.applicants.exceptions.GetEnrolleeException;
+import website.applicants.exceptions.SaveException;
 import website.applicants.mappers.EnrolleeMapper;
 import website.applicants.models.Enrollee;
 import website.applicants.repository.EnrolleeRepository;
@@ -24,17 +26,17 @@ public class DefaultEnrolleeService implements EnrolleeService {
     }
 
     @Override
-    public Enrollee getEnrollee(final int id) {
+    public Enrollee getEnrollee(final int id) throws GetEnrolleeException {
         return EnrolleeMapper.instance.enrolleeEntityToEnrollee(enrolleeRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Абитуриент не найден")));
+            .orElseThrow(() -> new GetEnrolleeException("Абитуриент не найден")));
     }
 
     @Override
-    public void save(final Enrollee enrollee) {
+    public void save(final Enrollee enrollee) throws SaveException {
         try {
             enrolleeRepository.save(EnrolleeMapper.instance.enrolleeToEnrolleeEntity(enrollee));
         } catch (Exception exception) {
-            throw new IllegalArgumentException("Введены не корректные данные");
+            throw new SaveException("Введены не корректные данные");
         }
     }
 }
