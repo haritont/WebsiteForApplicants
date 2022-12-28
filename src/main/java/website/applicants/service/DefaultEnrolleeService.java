@@ -26,13 +26,15 @@ public class DefaultEnrolleeService implements EnrolleeService {
     @Override
     public Enrollee getEnrollee(final int id) {
         return EnrolleeMapper.instance.enrolleeEntityToEnrollee(enrolleeRepository.findById(id)
-            .orElseThrow(() -> new NullPointerException("Абитуриент не найден")));
+            .orElseThrow(() -> new IllegalArgumentException("Абитуриент не найден")));
     }
 
     @Override
     public void save(final Enrollee enrollee) {
-        if (!enrollee.getFullName().isEmpty() && enrollee.getBirthday() != null) {
+        try {
             enrolleeRepository.save(EnrolleeMapper.instance.enrolleeToEnrolleeEntity(enrollee));
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("Введены не корректные данные");
         }
     }
 }

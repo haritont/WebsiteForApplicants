@@ -35,8 +35,10 @@ public class DefaultExamService implements ExamService {
 
     @Override
     public void save(final Exam exam) {
-        if (!exam.getSubject().isEmpty()) {
+        try {
             examRepository.save(ExamMapper.instance.examToExamEntity(exam));
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("Введены не корректные данные");
         }
     }
 
