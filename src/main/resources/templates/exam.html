@@ -15,7 +15,10 @@
 
         <div class="my-3 p-3">
             <h2 class="display-5">Введите данные
-                <p th:text="'Id: '+${idEnrollee}"/>
+                <p th:text="'Id:'"/>
+                <label>
+                    <input type="number" th:field="*{idEnrollee}" readonly class="form-control"/>
+                </label>
             </h2>
         </div>
 
@@ -26,7 +29,8 @@
                     <option value=""> --</option>
                     <option th:each="subject : ${subjects}"
                             th:value="${subject}"
-                            th:utext="${subject}"/>
+                            th:utext="${subject}">
+                    </option>
                 </select>
             </div>
             <div class="form-floating">
