@@ -35,7 +35,7 @@ public class EnrolleeController {
     @GetMapping("/exam{idEnrollee}")
     public String examForm(@PathVariable final int idEnrollee, Model model) {
         model.addAttribute("subjects", examService.getSingleExams())
-            .addAttribute("exam", new Exam(0, idEnrollee, "", 0));
+            .addAttribute("exam", new Exam(idEnrollee));
         return "exam";
     }
 

@@ -6,9 +6,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Exam {
     private int id;
-    private int idEnrollee;
+    @NonNull
+    private Integer idEnrollee;
     private String subject;
     private int score;
 }
