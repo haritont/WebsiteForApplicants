@@ -1,16 +1,18 @@
 package website.applicants.models;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Exam {
-    private int id;
+    int id;
     @NonNull
-    private Integer idEnrollee;
-    private String subject;
-    private int score;
+    Integer idEnrollee;
+    String subject;
+    int score;
 }

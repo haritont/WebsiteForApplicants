@@ -1,6 +1,7 @@
 package website.applicants.entity;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,14 +12,15 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EnrolleeEntity {
     @Id
     @GeneratedValue
     @Column(name = "ID", nullable = false)
-    private int id;
+    int id;
     @Column(name = "FULLNAME", length = 64, nullable = false)
-    private String fullName;
+    String fullName;
     @Temporal(TemporalType.DATE)
     @Column(name = "BIRTHDAY", nullable = false)
-    private Date birthday;
+    Date birthday;
 }

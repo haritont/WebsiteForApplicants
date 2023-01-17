@@ -1,6 +1,7 @@
 package website.applicants.models;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -12,10 +13,11 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @NotNull
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Enrollee {
-    private int id;
+    int id;
     @Size(min = 2, max = 30)
-    private String fullName;
+    String fullName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
+    Date birthday;
 }

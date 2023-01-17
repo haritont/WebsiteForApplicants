@@ -1,6 +1,7 @@
 package website.applicants.entity;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
@@ -10,15 +11,16 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExamEntity {
     @Id
     @GeneratedValue
     @Column(name = "ID", nullable = false)
-    private int id;
+    int id;
     @Column(name = "IDENROLLEE", nullable = false)
-    private int idEnrollee;
+    int idEnrollee;
     @Column(name = "SUBJECT", length = 64, nullable = false)
-    private String subject;
+    String subject;
     @Column(name = "SCORE", nullable = false)
-    private int score;
+    int score;
 }
