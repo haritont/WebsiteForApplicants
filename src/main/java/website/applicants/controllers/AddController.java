@@ -1,12 +1,13 @@
 package website.applicants.controllers;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import website.applicants.exceptions.SaveException;
 import website.applicants.models.Enrollee;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import website.applicants.service.EnrolleeService;
@@ -14,26 +15,23 @@ import website.applicants.service.EnrolleeService;
 
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AddController {
-    private final EnrolleeService enrolleeService;
+    EnrolleeService enrolleeService;
 
     @GetMapping("/add")
-    public String enrolleeForm(Model model) {
-        model.addAttribute("enrollee", new Enrollee());
-        return "add";
+    public ModelAndView enrolleeForm() {
+        return new ModelAndView("add").addObject("enrollee", new Enrollee());
     }
 
     @PostMapping("/add")
-    public String enrolleeSubmit(final Enrollee enrollee, Model model) throws SaveException {
+    public ModelAndView enrolleeSubmit(final Enrollee enrollee) throws SaveException {
         enrolleeService.save(enrollee);
-        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
-        return "/enrollees";
+        return new ModelAndView("/enrollees").addObject("enrollees", enrolleeService.getAllEnrolles());
     }
 
     @ExceptionHandler(SaveException.class)
     public ModelAndView handlerSaveException(Exception exception) {
-        ModelAndView model = new ModelAndView("exception");
-        model.addObject("message", exception.getMessage());
-        return model;
+        return new ModelAndView("exception").addObject("message", exception.getMessage());
     }
 }

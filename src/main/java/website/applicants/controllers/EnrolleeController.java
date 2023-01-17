@@ -1,6 +1,8 @@
 package website.applicants.controllers;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import website.applicants.exceptions.GetEnrolleeException;
@@ -8,55 +10,47 @@ import website.applicants.exceptions.SaveException;
 import website.applicants.models.Exam;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import website.applicants.service.EnrolleeService;
 import website.applicants.service.ExamService;
 
 
 @Controller
 @RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class EnrolleeController {
-    private final EnrolleeService enrolleeService;
-    private final ExamService examService;
+    EnrolleeService enrolleeService;
+    ExamService examService;
 
     @GetMapping("/enrollees")
-    public String enrollees(Model model) {
-        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
-        return "enrollees";
+    public ModelAndView enrollees() {
+        return new ModelAndView("enrollees").addObject("enrollees", enrolleeService.getAllEnrolles());
     }
 
     @GetMapping("/enrollee/{id}")
-    public String enrollee(@PathVariable final int id, Model model) throws GetEnrolleeException {
-        model.addAttribute("enrollee", enrolleeService.getEnrollee(id))
-            .addAttribute("exams", examService.getExamsEnrolleeId(id));
-        return "enrollee";
+    public ModelAndView enrollee(@PathVariable final int id) throws GetEnrolleeException {
+        return new ModelAndView("enrollee").addObject("enrollee", enrolleeService.getEnrollee(id))
+            .addObject("exams", examService.getExamsEnrolleeId(id));
     }
 
     @GetMapping("/exam{idEnrollee}")
-    public String examForm(@PathVariable final int idEnrollee, Model model) {
-        model.addAttribute("subjects", examService.getSingleExams())
-            .addAttribute("exam", new Exam(idEnrollee));
-        return "exam";
+    public ModelAndView examForm(@PathVariable final int idEnrollee) {
+        return new ModelAndView("exam").addObject("subjects", examService.getSingleExams())
+            .addObject("exam", new Exam(idEnrollee));
     }
 
     @PostMapping("/exam")
-    public String examSubmit(final Exam exam, Model model) throws SaveException {
+    public ModelAndView examSubmit(final Exam exam) throws SaveException {
         examService.save(exam);
-        model.addAttribute("enrollees", enrolleeService.getAllEnrolles());
-        return "/enrollees";
+        return new ModelAndView("/enrollees").addObject("enrollees", enrolleeService.getAllEnrolles());
     }
 
     @ExceptionHandler(SaveException.class)
     public ModelAndView handlerSaveException(Exception exception) {
-        ModelAndView model = new ModelAndView("exception");
-        model.addObject("message", exception.getMessage());
-        return model;
+        return new ModelAndView("exception").addObject("message", exception.getMessage());
     }
 
     @ExceptionHandler(GetEnrolleeException.class)
     public ModelAndView handlerGetEnrolleeException(Exception exception) {
-        ModelAndView model = new ModelAndView("exception");
-        model.addObject("message", exception.getMessage());
-        return model;
+        return new ModelAndView("exception").addObject("message", exception.getMessage());
     }
 }
