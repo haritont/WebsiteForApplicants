@@ -1,53 +1,59 @@
 package website.applicants.service;
 
 import lombok.val;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import website.applicants.exceptions.SaveException;
 import website.applicants.models.Exam;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 @SpringBootTest
 class DefaultExamServiceTest {
-
-    private final Exam exam1 = new Exam(1, 1, "Предмет1", 100);
-    private final Exam exam2 = new Exam(2, 1, "Предмет2", 100);
-
     @Autowired
     private DefaultExamService service;
 
     @Test
     void getAllExams() throws SaveException {
+        Exam exam1 = new Exam(1, 1, "Предмет1", 100);
+        Exam exam2 = new Exam(2, 1, "Предмет2", 100);
+
         service.save(exam1);
         service.save(exam2);
 
         val exams = service.getAllExams();
 
-        Assertions.assertEquals(exam1.getSubject(), exams.get(0).getSubject());
-        Assertions.assertEquals(exam2.getSubject(), exams.get(1).getSubject());
+        assertThat(exam1.getSubject()).isEqualTo(exams.get(0).getSubject());
+        assertThat(exam2.getSubject()).isEqualTo(exams.get(1).getSubject());
     }
 
     @Test
     void getSingleExams() throws SaveException {
+        Exam exam1 = new Exam(1, 1, "Предмет1", 100);
+        Exam exam2 = new Exam(2, 1, "Предмет2", 100);
+
         service.save(exam1);
         service.save(exam2);
 
         val exams = service.getSingleExams();
 
-        Assertions.assertEquals(exam1.getSubject(), exams.get(0));
-        Assertions.assertEquals(exam2.getSubject(), exams.get(1));
+        assertThat(exam1.getSubject()).isEqualTo(exams.get(0));
+        assertThat(exam2.getSubject()).isEqualTo(exams.get(1));
     }
 
     @Test
     void getExamsEnrolleeId() throws SaveException {
+        Exam exam1 = new Exam(1, 1, "Предмет1", 100);
+        Exam exam2 = new Exam(2, 1, "Предмет2", 100);
+
         service.save(exam1);
         service.save(exam2);
 
         val exams = service.getExamsEnrolleeId(1);
 
-        Assertions.assertEquals(exam1.getSubject(), exams.get(0).getSubject());
-        Assertions.assertEquals(exam2.getSubject(), exams.get(1).getSubject());
+        assertThat(exam1.getSubject()).isEqualTo(exams.get(0).getSubject());
+        assertThat(exam2.getSubject()).isEqualTo(exams.get(1).getSubject());
     }
 }
