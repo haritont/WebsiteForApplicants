@@ -2,12 +2,13 @@ package website.applicants.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import website.applicants.entity.EnrolleeEntity;
 import website.applicants.models.Enrollee;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EnrolleeMapper {
 
     @Mapping(target = "id", source = "enrollee.id")
