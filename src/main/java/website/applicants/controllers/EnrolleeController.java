@@ -3,6 +3,7 @@ package website.applicants.controllers;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import website.applicants.exceptions.GetEnrolleeException;
@@ -45,12 +46,12 @@ public class EnrolleeController {
     }
 
     @ExceptionHandler(SaveException.class)
-    public ModelAndView handlerSaveException(Exception exception) {
+    public ModelAndView handlerSaveException(DataIntegrityViolationException exception) {
         return new ModelAndView("exception").addObject("message", exception.getMessage());
     }
 
     @ExceptionHandler(GetEnrolleeException.class)
-    public ModelAndView handlerGetEnrolleeException(Exception exception) {
+    public ModelAndView handlerGetEnrolleeException(IllegalArgumentException exception) {
         return new ModelAndView("exception").addObject("message", exception.getMessage());
     }
 }
