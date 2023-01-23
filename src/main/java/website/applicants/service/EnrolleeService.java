@@ -7,7 +7,7 @@ import website.applicants.models.Enrollee;
 import java.util.List;
 
 public interface EnrolleeService {
-    List<Enrollee> getAllEnrolles();
+    List<Enrollee> getAllEnrolles(int idFirst, int idEnd);
 
     Enrollee getEnrollee(int id) throws GetEnrolleeException;
 

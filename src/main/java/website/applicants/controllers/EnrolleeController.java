@@ -19,12 +19,14 @@ import website.applicants.service.ExamService;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class EnrolleeController {
+    int idEnd = 5;
     EnrolleeService enrolleeService;
     ExamService examService;
 
-    @GetMapping("/enrollees")
-    public ModelAndView enrollees() {
-        return new ModelAndView("enrollees").addObject("enrollees", enrolleeService.getAllEnrolles());
+    @GetMapping("/enrollees{page}")
+    public ModelAndView enrollees(@PathVariable final int page) {
+        return new ModelAndView("enrollees")
+            .addObject("enrollees", enrolleeService.getAllEnrolles(idEnd * page - idEnd, idEnd * page));
     }
 
     @GetMapping("/enrollee/{id}")
@@ -42,7 +44,8 @@ public class EnrolleeController {
     @PostMapping("/exam")
     public ModelAndView examSubmit(final Exam exam) throws SaveException {
         examService.save(exam);
-        return new ModelAndView("/enrollees").addObject("enrollees", enrolleeService.getAllEnrolles());
+        return new ModelAndView("/enrollees")
+            .addObject("enrollees", enrolleeService.getAllEnrolles(0, idEnd));
     }
 
     @ExceptionHandler(SaveException.class)

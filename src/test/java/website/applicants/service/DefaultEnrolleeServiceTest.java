@@ -26,7 +26,7 @@ class DefaultEnrolleeServiceTest {
         service.save(enrollee1);
         service.save(enrollee2);
 
-        val enrollees = service.getAllEnrolles();
+        val enrollees = service.getAllEnrolles(1, 2);
 
         assertThat(enrollee1.getFullName()).isEqualTo(enrollees.get(0).getFullName());
         assertThat(enrollee2.getFullName()).isEqualTo(enrollees.get(1).getFullName());

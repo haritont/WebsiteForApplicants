@@ -28,7 +28,8 @@ public class AddController {
     @PostMapping("/add")
     public ModelAndView enrolleeSubmit(final Enrollee enrollee) throws SaveException {
         enrolleeService.save(enrollee);
-        return new ModelAndView("/enrollees").addObject("enrollees", enrolleeService.getAllEnrolles());
+        return new ModelAndView("/enrollees")
+            .addObject("enrollees", enrolleeService.getAllEnrolles(0, 5));
     }
 
     @ExceptionHandler(SaveException.class)

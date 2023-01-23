@@ -23,8 +23,8 @@ public class DefaultEnrolleeService implements EnrolleeService {
     EnrolleeMapper mapper;
 
     @Override
-    public List<Enrollee> getAllEnrolles() {
-        return mapper.listEnrolleeEntityToListEnrollee(new ArrayList<>(enrolleeRepository.findAll()));
+    public List<Enrollee> getAllEnrolles(int idFirst, int idEnd) {
+        return mapper.listEnrolleeEntityToListEnrollee(new ArrayList<>(enrolleeRepository.findAllByIdBetween(idFirst, idEnd)));
     }
 
     @Override
